@@ -1,0 +1,15 @@
+<div class="app-container min-h-screen flex flex-col">
+  @if (isLoading()) {
+    <div class="loading-screen flex-1 flex items-center justify-center">
+      <div class="text-center">
+        <div class="spinner mx-auto mb-4"></div>
+        <p>Cargando...</p>
+      </div>
+    </div>
+  } @else {
+    <main class="flex-1">
+      <router-outlet />
+    </main>
+  }
+  <app-footer />
+</div>

@@ -1,0 +1,173 @@
+<div class="proteccion-container p-6 max-w-6xl mx-auto">
+  <div class="bg-white rounded-lg shadow-lg p-6">
+    <h2 class="text-2xl font-bold text-gray-800 mb-2">🛡️ Protección Conductores</h2>
+    <p class="text-gray-600 mb-6">Simula opciones de restructura para el contrato de {{ clientId || 'este cliente' }}.</p>
+
+    <!-- Panel de contexto -->
+    <div class="bg-red-50 rounded-lg p-4 mb-6">
+      <h3 class="text-lg font-semibold text-red-800 mb-4">Contexto de la Crisis</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="form-group">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Motivo:</label>
+          <select 
+            [(ngModel)]="motivoRestructura"
+            class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500"
+          >
+            <option value="incapacidad">Incapacidad Médica</option>
+            <option value="falla">Falla Mecánica Mayor</option>
+            <option value="ingresos">Caída de Ingresos</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Meses Afectados: {{ mesesAfectados }}
+          </label>
+          <input 
+            type="range" 
+            min="1" 
+            max="3" 
+            [(ngModel)]="mesesAfectados" 
+            (ngModelChange)="runSimulation()"
+            class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Información del contrato -->
+    <div class="bg-blue-50 rounded-lg p-4 mb-6">
+      <h3 class="text-lg font-semibold text-blue-800 mb-3">Información del Contrato</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+        <div>
+          <p class="text-blue-600">Principal Original</p>
+          <p class="font-bold text-blue-800">{{ contratoBase.P0 | currency }}</p>
+        </div>
+        <div>
+          <p class="text-blue-600">Mensualidad Actual</p>
+          <p class="font-bold text-blue-800">{{ contratoBase.M0 | currency }}</p>
+        </div>
+        <div>
+          <p class="text-blue-600">Pagos Realizados</p>
+          <p class="font-bold text-blue-800">{{ contratoBase.k }} / {{ contratoBase.n }}</p>
+        </div>
+        <div>
+          <p class="text-blue-600">Tasa Anual</p>
+          <p class="font-bold text-blue-800">{{ (contratoBase.r * 12 * 100) | number:'1.1-1' }}%</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel de escenarios -->
+    <div class="scenarios-panel">
+      <h3 class="text-lg font-semibold mb-4">Explora Opciones de Protección</h3>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div *ngFor="let scenario of simulatedScenarios" class="scenario-card bg-gray-50 rounded-lg p-4 border border-gray-200">
+          <h4 class="text-lg font-semibold text-gray-800 mb-3">{{ scenario.type }}</h4>
+          
+          <div class="scenario-details space-y-2 mb-4">
+            <div class="flex justify-between">
+              <span class="text-gray-600">Pago Mensual:</span>
+              <strong class="text-gray-800">{{ scenario.newMonthlyPayment | currency }}</strong>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">Plazo Final:</span>
+              <strong class="text-gray-800">{{ scenario.newTerm }} meses</strong>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">Costo Total (Δ):</span>
+              <strong [class.text-red-600]="scenario.totalCostDelta > 0" [class.text-green-600]="scenario.totalCostDelta < 0">
+                {{ scenario.totalCostDelta | currency }}
+              </strong>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">TIR Post:</span>
+              <span [class.text-green-600]="scenario.tirOK" [class.text-red-600]="!scenario.tirOK">
+                {{ scenario.tirPost | percent }}
+              </span>
+            </div>
+            <div *ngIf="scenario.warnings.length > 0" class="text-sm text-orange-600">
+              ⚠️ {{ scenario.warnings.join(', ') }}
+            </div>
+          </div>
+
+          <!-- Controles específicos por tipo de escenario -->
+          <div *ngIf="scenario.type === 'Diferimiento'" class="variant-sliders space-y-3 mb-4">
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">
+                Meses a Diferir: {{ diferimientoMeses }}
+              </label>
+              <input 
+                type="range" 
+                min="1" 
+                max="3" 
+                [(ngModel)]="diferimientoMeses" 
+                (ngModelChange)="runSimulation()"
+                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+              >
+            </div>
+            <div class="flex items-center">
+              <input 
+                type="checkbox" 
+                [(ngModel)]="diferimientoCapitaliza" 
+                (ngModelChange)="runSimulation()"
+                class="mr-2"
+              >
+              <label class="text-sm text-gray-600">Capitalizar Intereses</label>
+            </div>
+          </div>
+
+          <div *ngIf="scenario.type === 'Recalendario'" class="variant-sliders mb-4">
+            <label class="block text-sm text-gray-600 mb-1">
+              Meses a Extender: {{ recalendarioDeltaMeses }}
+            </label>
+            <input 
+              type="range" 
+              min="1" 
+              max="12" 
+              [(ngModel)]="recalendarioDeltaMeses" 
+              (ngModelChange)="runSimulation()"
+              class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+            >
+          </div>
+
+          <div *ngIf="scenario.type === 'Step-down'" class="variant-sliders space-y-3 mb-4">
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">
+                Meses Reducidos: {{ stepDownMeses }}
+              </label>
+              <input 
+                type="range" 
+                min="1" 
+                max="3" 
+                [(ngModel)]="stepDownMeses" 
+                (ngModelChange)="runSimulation()"
+                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+              >
+            </div>
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">
+                Reducción (%): {{ stepDownAlpha * 100 }}%
+              </label>
+              <input 
+                type="range" 
+                min="0.1" 
+                max="0.5" 
+                step="0.05" 
+                [(ngModel)]="stepDownAlpha" 
+                (ngModelChange)="runSimulation()"
+                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+              >
+            </div>
+          </div>
+
+          <button 
+            (click)="applyProtection(scenario)"
+            class="w-full bg-blue-600 text-white py-2 px-4 rounded-md font-semibold hover:bg-blue-700 transition-colors"
+          >
+            Aplicar y Firmar Adendum
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,210 @@
+.dashboard-container {
+  padding: 2rem;
+  background-color: #030712;
+  min-height: 100vh;
+  color: #e5e7eb;
+}
+
+.dashboard-header {
+  margin-bottom: 2rem;
+  
+  .dashboard-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 0.5rem 0;
+  }
+  
+  .dashboard-subtitle {
+    color: #9ca3af;
+    margin: 0;
+    font-size: 1rem;
+  }
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  color: #06b6d4;
+  
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #374151;
+    border-top: 3px solid #06b6d4;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    margin: 0;
+    font-size: 1rem;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.dashboard-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.metric-card {
+  background: linear-gradient(135deg, #1f2937, #374151);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid #374151;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    border-color: #06b6d4;
+    box-shadow: 0 8px 25px rgba(6, 182, 212, 0.15);
+  }
+  
+  .metric-icon {
+    font-size: 2rem;
+    background: rgba(6, 182, 212, 0.1);
+    padding: 0.75rem;
+    border-radius: 8px;
+  }
+  
+  .metric-info {
+    h3 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0 0 0.25rem 0;
+      color: #ffffff;
+    }
+    
+    p {
+      margin: 0;
+      color: #9ca3af;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+  }
+}
+
+.recent-activity {
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0 0 1.5rem 0;
+  }
+}
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.activity-item {
+  background: #1f2937;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #374151;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: #374151;
+    border-color: #06b6d4;
+  }
+  
+  .client-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .activity-content {
+    flex: 1;
+    
+    h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin: 0 0 0.25rem 0;
+    }
+    
+    .client-status {
+      font-size: 0.875rem;
+      color: #06b6d4;
+      margin: 0 0 0.25rem 0;
+      font-weight: 500;
+    }
+    
+    .client-flow {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      margin: 0;
+    }
+  }
+  
+  .health-score {
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    
+    &.health-high {
+      background: rgba(16, 185, 129, 0.2);
+      color: #10b981;
+    }
+    
+    &.health-medium {
+      background: rgba(245, 158, 11, 0.2);
+      color: #f59e0b;
+    }
+    
+    &.health-low {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 1rem;
+  }
+  
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .activity-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    
+    .client-avatar {
+      width: 40px;
+      height: 40px;
+    }
+  }
+}

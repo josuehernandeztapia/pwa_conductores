@@ -1,0 +1,141 @@
+.metamap-container {
+  background: #1f2937;
+  border-radius: 12px;
+  padding: 24px;
+  margin: 16px 0;
+  border: 1px solid #374151;
+}
+
+.metamap-header {
+  text-align: center;
+  margin-bottom: 24px;
+  
+  h3 {
+    color: #f9fafb;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+  }
+  
+  p {
+    color: #9ca3af;
+    font-size: 0.875rem;
+    margin: 0;
+  }
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 16px;
+  
+  .spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid #374151;
+    border-top: 3px solid #06b6d4;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 16px;
+  }
+  
+  p {
+    color: #9ca3af;
+    font-size: 0.875rem;
+    margin: 0;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.metamap-button-container {
+  display: flex;
+  justify-content: center;
+  margin: 24px 0;
+  
+  metamap-button {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+.verification-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 8px;
+  margin-top: 20px;
+  
+  &.status-completed {
+    background-color: rgba(16, 185, 129, 0.1);
+    border: 1px solid #10b981;
+    
+    .status-icon {
+      color: #10b981;
+    }
+    
+    .status-message {
+      color: #d1fae5;
+    }
+  }
+  
+  &.status-pending {
+    background-color: rgba(245, 158, 11, 0.1);
+    border: 1px solid #f59e0b;
+    
+    .status-icon {
+      color: #f59e0b;
+    }
+    
+    .status-message {
+      color: #fef3c7;
+    }
+  }
+  
+  &.status-rejected {
+    background-color: rgba(239, 68, 68, 0.1);
+    border: 1px solid #ef4444;
+    
+    .status-icon {
+      color: #ef4444;
+    }
+    
+    .status-message {
+      color: #fee2e2;
+    }
+  }
+}
+
+.status-icon {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.status-message {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .metamap-container {
+    margin: 12px 0;
+    padding: 20px;
+  }
+  
+  .metamap-header h3 {
+    font-size: 1.25rem;
+  }
+  
+  .verification-status {
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
+}

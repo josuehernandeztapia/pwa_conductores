@@ -1,0 +1,1178 @@
+@import '../../../styles.scss';
+
+.document-center-container {
+  padding: 20px;
+  background: $background-dark;
+  min-height: calc(100vh - 140px);
+  color: $text-light;
+
+  .document-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: $card-dark;
+    border-radius: 12px;
+    border: 1px solid $border-color;
+
+    .header-left {
+      .center-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 0;
+        font-size: 28px;
+        font-weight: 700;
+        color: $text-light;
+
+        .title-icon {
+          font-size: 32px;
+        }
+      }
+
+      .center-subtitle {
+        margin: 8px 0 0 44px;
+        color: $text-muted;
+        font-size: 14px;
+      }
+    }
+
+    .header-stats {
+      display: flex;
+      gap: 16px;
+
+      .stat-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 12px 16px;
+        background: $surface-dark;
+        border-radius: 8px;
+        border: 1px solid $border-color;
+        min-width: 80px;
+
+        .stat-number {
+          font-size: 24px;
+          font-weight: 700;
+          margin-bottom: 4px;
+        }
+
+        .stat-label {
+          font-size: 12px;
+          color: $text-muted;
+          text-transform: uppercase;
+          font-weight: 500;
+        }
+
+        &.pending .stat-number {
+          color: #f59e0b;
+        }
+
+        &.approval .stat-number {
+          color: #10b981;
+        }
+
+        &.today .stat-number {
+          color: $accent-color;
+        }
+      }
+    }
+  }
+
+  .action-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 16px 20px;
+    background: $card-dark;
+    border-radius: 12px;
+    border: 1px solid $border-color;
+
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+
+      .btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 16px;
+        border-radius: 8px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &.btn-primary {
+          background: $accent-color;
+          color: white;
+          
+          &:hover {
+            background: darken($accent-color, 10%);
+            transform: translateY(-2px);
+          }
+        }
+
+        &.btn-secondary {
+          background: transparent;
+          color: $text-light;
+          border: 1px solid $border-color;
+          
+          &:hover {
+            background: rgba($accent-color, 0.1);
+            border-color: $accent-color;
+          }
+        }
+
+        .btn-icon {
+          font-size: 16px;
+        }
+      }
+    }
+
+    .view-toggles {
+      display: flex;
+      gap: 4px;
+      padding: 4px;
+      background: $surface-dark;
+      border-radius: 8px;
+
+      .view-toggle {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 12px;
+        background: transparent;
+        color: $text-muted;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        font-size: 14px;
+
+        &:hover {
+          color: $text-light;
+          background: rgba($accent-color, 0.1);
+        }
+
+        &.active {
+          background: $accent-color;
+          color: white;
+        }
+
+        .view-icon {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+
+  .alerts-panel {
+    margin-bottom: 20px;
+    padding: 16px;
+    background: $card-dark;
+    border-radius: 12px;
+    border-left: 4px solid #f59e0b;
+
+    .alert-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+      
+      &:not(:last-child) {
+        border-bottom: 1px solid $border-color;
+        margin-bottom: 8px;
+        padding-bottom: 8px;
+      }
+
+      .alert-icon {
+        font-size: 20px;
+      }
+
+      .alert-text {
+        flex: 1;
+        color: $text-light;
+      }
+
+      .alert-action {
+        padding: 4px 8px;
+        background: transparent;
+        color: $accent-color;
+        border: 1px solid $accent-color;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 12px;
+        
+        &:hover {
+          background: $accent-color;
+          color: white;
+        }
+      }
+
+      &.critical {
+        border-left-color: #ef4444;
+      }
+
+      &.warning {
+        border-left-color: #f59e0b;
+      }
+
+      &.info {
+        border-left-color: $accent-color;
+      }
+    }
+  }
+
+  .main-content {
+    .uploads-view {
+      .upload-sections {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        .upload-section {
+          background: $card-dark;
+          border-radius: 12px;
+          border: 1px solid $border-color;
+          overflow: hidden;
+
+          .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 0;
+            padding: 16px 20px;
+            background: $surface-dark;
+            border-bottom: 1px solid $border-color;
+            font-size: 16px;
+            font-weight: 600;
+            color: $text-light;
+
+            .section-icon {
+              font-size: 20px;
+            }
+          }
+
+          .upload-list {
+            padding: 16px;
+
+            .upload-item {
+              display: flex;
+              align-items: center;
+              gap: 16px;
+              padding: 16px;
+              background: $background-dark;
+              border: 1px solid $border-color;
+              border-radius: 8px;
+              margin-bottom: 12px;
+              transition: all 0.3s ease;
+
+              &:hover {
+                border-color: $accent-color;
+                transform: translateY(-1px);
+              }
+
+              &:last-child {
+                margin-bottom: 0;
+              }
+
+              &.validado {
+                border-left: 4px solid #10b981;
+              }
+
+              &.rechazado {
+                border-left: 4px solid #ef4444;
+              }
+
+              &.procesando,
+              &.active {
+                border-left: 4px solid $accent-color;
+              }
+
+              .upload-info {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                flex: 1;
+
+                .file-icon {
+                  font-size: 24px;
+                  width: 40px;
+                  text-align: center;
+                }
+
+                .file-details {
+                  .file-name {
+                    font-weight: 600;
+                    color: $text-light;
+                    margin-bottom: 4px;
+                  }
+
+                  .file-meta {
+                    display: flex;
+                    gap: 12px;
+                    font-size: 12px;
+                    color: $text-muted;
+
+                    .validation-score {
+                      color: #10b981;
+                      font-weight: 500;
+                    }
+                  }
+                }
+              }
+
+              .upload-progress {
+                flex: 1;
+                max-width: 200px;
+
+                .progress-info {
+                  display: flex;
+                  justify-content: space-between;
+                  margin-bottom: 4px;
+                  font-size: 12px;
+
+                  .progress-text {
+                    color: $text-muted;
+                  }
+
+                  .progress-percent {
+                    color: $accent-color;
+                    font-weight: 600;
+                  }
+                }
+
+                .progress-bar {
+                  height: 6px;
+                  background: $surface-dark;
+                  border-radius: 3px;
+                  overflow: hidden;
+
+                  .progress-fill {
+                    height: 100%;
+                    background: linear-gradient(90deg, $accent-color, lighten($accent-color, 10%));
+                    transition: width 0.3s ease;
+                  }
+                }
+              }
+
+              .upload-status {
+                flex: 1;
+
+                .status-badge {
+                  display: inline-block;
+                  padding: 2px 8px;
+                  border-radius: 12px;
+                  font-size: 12px;
+                  font-weight: 600;
+                  margin-bottom: 8px;
+
+                  &.validado {
+                    background: rgba(#10b981, 0.2);
+                    color: #10b981;
+                  }
+
+                  &.rechazado {
+                    background: rgba(#ef4444, 0.2);
+                    color: #ef4444;
+                  }
+
+                  &.procesando {
+                    background: rgba($accent-color, 0.2);
+                    color: $accent-color;
+                  }
+                }
+
+                .extracted-data {
+                  .data-label {
+                    font-size: 12px;
+                    color: $text-muted;
+                    display: block;
+                    margin-bottom: 4px;
+                  }
+
+                  .data-items {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 6px;
+
+                    .data-item {
+                      font-size: 11px;
+                      background: rgba($accent-color, 0.1);
+                      color: $accent-color;
+                      padding: 2px 6px;
+                      border-radius: 4px;
+                    }
+                  }
+                }
+              }
+
+              .upload-actions {
+                display: flex;
+                gap: 6px;
+
+                .action-btn {
+                  padding: 6px 8px;
+                  background: transparent;
+                  border: none;
+                  border-radius: 4px;
+                  cursor: pointer;
+                  transition: all 0.3s ease;
+                  font-size: 14px;
+
+                  &:hover {
+                    background: rgba($accent-color, 0.1);
+                  }
+
+                  &.cancel {
+                    &:hover {
+                      background: rgba(#ef4444, 0.1);
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        .empty-state {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 60px 20px;
+          background: $card-dark;
+          border-radius: 12px;
+          border: 2px dashed $border-color;
+          text-align: center;
+
+          .empty-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+          }
+
+          .empty-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: $text-light;
+            margin-bottom: 8px;
+          }
+
+          .empty-subtitle {
+            color: $text-muted;
+            margin-bottom: 24px;
+          }
+        }
+      }
+    }
+
+    .pending-view {
+      .pending-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding: 16px 20px;
+        background: $card-dark;
+        border-radius: 12px;
+
+        h3 {
+          margin: 0;
+          color: $text-light;
+        }
+
+        .pending-filters {
+          select {
+            padding: 8px 12px;
+            background: $surface-dark;
+            color: $text-light;
+            border: 1px solid $border-color;
+            border-radius: 6px;
+            font-size: 14px;
+
+            &:focus {
+              outline: none;
+              border-color: $accent-color;
+            }
+          }
+        }
+      }
+
+      .pending-list {
+        .pending-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 20px;
+          background: $card-dark;
+          border: 1px solid $border-color;
+          border-radius: 12px;
+          margin-bottom: 12px;
+          transition: all 0.3s ease;
+
+          &:hover {
+            border-color: $accent-color;
+            transform: translateY(-1px);
+          }
+
+          &.alta {
+            border-left: 4px solid #ef4444;
+          }
+
+          &.media {
+            border-left: 4px solid #f59e0b;
+          }
+
+          &.baja {
+            border-left: 4px solid #10b981;
+          }
+
+          .pending-info {
+            flex: 1;
+
+            .client-info {
+              margin-bottom: 8px;
+
+              strong {
+                color: $text-light;
+                font-size: 16px;
+              }
+
+              .expediente-id {
+                color: $text-muted;
+                margin-left: 12px;
+                font-size: 14px;
+              }
+            }
+
+            .document-info {
+              display: flex;
+              gap: 16px;
+              margin-bottom: 8px;
+
+              .document-type {
+                color: $accent-color;
+                font-weight: 600;
+              }
+
+              .document-state {
+                color: #f59e0b;
+                font-weight: 500;
+              }
+            }
+
+            .timeline-info {
+              display: flex;
+              gap: 16px;
+              font-size: 14px;
+              color: $text-muted;
+
+              .deadline {
+                color: #f59e0b;
+                font-weight: 500;
+              }
+            }
+          }
+
+          .pending-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            .priority-indicator {
+              padding: 4px 8px;
+              border-radius: 4px;
+              font-size: 12px;
+              font-weight: 600;
+
+              &.alta {
+                background: rgba(#ef4444, 0.2);
+                color: #ef4444;
+              }
+
+              &.media {
+                background: rgba(#f59e0b, 0.2);
+                color: #f59e0b;
+              }
+
+              &.baja {
+                background: rgba(#10b981, 0.2);
+                color: #10b981;
+              }
+            }
+
+            .action-btn {
+              padding: 6px 12px;
+              border: none;
+              border-radius: 6px;
+              font-weight: 600;
+              cursor: pointer;
+              transition: all 0.3s ease;
+              font-size: 12px;
+
+              &.review {
+                background: rgba($accent-color, 0.2);
+                color: $accent-color;
+
+                &:hover {
+                  background: $accent-color;
+                  color: white;
+                }
+              }
+
+              &.approve {
+                background: rgba(#10b981, 0.2);
+                color: #10b981;
+
+                &:hover {
+                  background: #10b981;
+                  color: white;
+                }
+              }
+
+              &.reject {
+                background: rgba(#ef4444, 0.2);
+                color: #ef4444;
+
+                &:hover {
+                  background: #ef4444;
+                  color: white;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .expedientes-view {
+      .expedientes-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 20px;
+
+        .expediente-card {
+          background: $card-dark;
+          border: 1px solid $border-color;
+          border-radius: 12px;
+          padding: 20px;
+          transition: all 0.3s ease;
+
+          &:hover {
+            border-color: $accent-color;
+            transform: translateY(-2px);
+          }
+
+          .expediente-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+
+            .client-info {
+              h4 {
+                margin: 0 0 4px 0;
+                color: $text-light;
+              }
+
+              .expediente-id {
+                font-size: 12px;
+                color: $text-muted;
+              }
+            }
+
+            .expediente-status {
+              .status-badge {
+                padding: 4px 8px;
+                border-radius: 12px;
+                font-size: 12px;
+                font-weight: 600;
+
+                &.nuevo {
+                  background: rgba($accent-color, 0.2);
+                  color: $accent-color;
+                }
+
+                &.proceso {
+                  background: rgba(#f59e0b, 0.2);
+                  color: #f59e0b;
+                }
+
+                &.aprobado,
+                &.completado {
+                  background: rgba(#10b981, 0.2);
+                  color: #10b981;
+                }
+              }
+            }
+          }
+
+          .expediente-progress {
+            margin-bottom: 16px;
+
+            .progress-info {
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 8px;
+              font-size: 12px;
+              color: $text-muted;
+            }
+
+            .progress-bar {
+              height: 6px;
+              background: $surface-dark;
+              border-radius: 3px;
+              overflow: hidden;
+
+              .progress-fill {
+                height: 100%;
+                background: linear-gradient(90deg, $accent-color, lighten($accent-color, 10%));
+                transition: width 0.3s ease;
+              }
+            }
+          }
+
+          .expediente-documents {
+            margin-bottom: 20px;
+
+            .document-categories {
+              .category {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 8px;
+
+                .category-name {
+                  font-size: 12px;
+                  color: $text-muted;
+                  font-weight: 600;
+                  min-width: 40px;
+                }
+
+                .category-docs {
+                  display: flex;
+                  gap: 4px;
+
+                  .doc-status {
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 4px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 10px;
+                    font-weight: 600;
+                    background: $surface-dark;
+                    color: $text-muted;
+
+                    &.validado {
+                      background: #10b981;
+                      color: white;
+                    }
+
+                    &.rechazado {
+                      background: #ef4444;
+                      color: white;
+                    }
+
+                    &.procesando {
+                      background: $accent-color;
+                      color: white;
+                    }
+
+                    &.missing {
+                      background: $surface-dark;
+                      border: 1px dashed $border-color;
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+          .expediente-actions {
+            display: flex;
+            gap: 8px;
+
+            .btn {
+              flex: 1;
+              padding: 8px 12px;
+              border: none;
+              border-radius: 6px;
+              font-weight: 600;
+              cursor: pointer;
+              transition: all 0.3s ease;
+              font-size: 12px;
+
+              &.btn-secondary {
+                background: transparent;
+                color: $text-muted;
+                border: 1px solid $border-color;
+
+                &:hover {
+                  color: $text-light;
+                  border-color: $accent-color;
+                }
+              }
+
+              &.btn-primary {
+                background: $accent-color;
+                color: white;
+
+                &:hover {
+                  background: darken($accent-color, 10%);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+
+    .modal-content {
+      background: $card-dark;
+      border: 1px solid $border-color;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+
+      &.upload-modal,
+      &.batch-modal {
+        max-width: 700px;
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 24px;
+        border-bottom: 1px solid $border-color;
+
+        h3 {
+          margin: 0;
+          color: $text-light;
+        }
+
+        .close-btn {
+          background: none;
+          border: none;
+          color: $text-muted;
+          font-size: 20px;
+          cursor: pointer;
+          padding: 4px;
+
+          &:hover {
+            color: $text-light;
+          }
+        }
+      }
+
+      .upload-form,
+      .batch-content {
+        padding: 24px;
+
+        .expediente-selector {
+          margin-bottom: 20px;
+
+          label {
+            display: block;
+            color: $text-light;
+            font-weight: 500;
+            margin-bottom: 8px;
+          }
+
+          .expediente-select {
+            width: 100%;
+            padding: 12px;
+            background: $surface-dark;
+            color: $text-light;
+            border: 1px solid $border-color;
+            border-radius: 8px;
+            font-size: 14px;
+
+            &:focus {
+              outline: none;
+              border-color: $accent-color;
+            }
+          }
+        }
+
+        .file-drop-zone,
+        .batch-drop-zone {
+          border: 2px dashed $border-color;
+          border-radius: 12px;
+          padding: 40px;
+          text-align: center;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          margin-bottom: 20px;
+
+          &:hover,
+          &.drag-over {
+            border-color: $accent-color;
+            background: rgba($accent-color, 0.05);
+          }
+
+          .drop-content {
+            .drop-icon {
+              font-size: 48px;
+              margin-bottom: 16px;
+              opacity: 0.5;
+            }
+
+            .drop-text {
+              font-size: 16px;
+              color: $text-light;
+              margin-bottom: 8px;
+
+              strong {
+                color: $accent-color;
+              }
+            }
+
+            .drop-subtitle {
+              font-size: 12px;
+              color: $text-muted;
+            }
+          }
+        }
+
+        .selected-files {
+          h4 {
+            color: $text-light;
+            margin-bottom: 12px;
+          }
+
+          .file-list {
+            .file-item {
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              padding: 12px;
+              background: $surface-dark;
+              border: 1px solid $border-color;
+              border-radius: 8px;
+              margin-bottom: 8px;
+
+              .file-info {
+                flex: 1;
+
+                .file-name {
+                  font-weight: 600;
+                  color: $text-light;
+                  margin-bottom: 4px;
+                }
+
+                .file-size {
+                  font-size: 12px;
+                  color: $text-muted;
+                }
+              }
+
+              .file-type-selector {
+                select {
+                  padding: 6px 8px;
+                  background: $background-dark;
+                  color: $text-light;
+                  border: 1px solid $border-color;
+                  border-radius: 4px;
+                  font-size: 12px;
+                  min-width: 150px;
+
+                  &:focus {
+                    outline: none;
+                    border-color: $accent-color;
+                  }
+                }
+              }
+
+              .remove-file {
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-size: 16px;
+                padding: 4px;
+                border-radius: 4px;
+
+                &:hover {
+                  background: rgba(#ef4444, 0.1);
+                }
+              }
+            }
+          }
+        }
+
+        .batch-info {
+          margin-bottom: 20px;
+
+          h4 {
+            color: $text-light;
+            margin-bottom: 8px;
+          }
+
+          p {
+            color: $text-muted;
+            font-size: 14px;
+          }
+        }
+
+        .batch-files {
+          margin-top: 20px;
+
+          h4 {
+            color: $text-light;
+            margin-bottom: 12px;
+          }
+
+          .batch-summary {
+            display: flex;
+            gap: 16px;
+            padding: 12px;
+            background: $surface-dark;
+            border-radius: 8px;
+            font-size: 12px;
+            color: $text-muted;
+
+            .file-count {
+              color: $accent-color;
+            }
+
+            .estimated-time {
+              color: #f59e0b;
+            }
+          }
+        }
+      }
+
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 24px;
+        padding: 20px 24px;
+        border-top: 1px solid $border-color;
+
+        .btn {
+          padding: 12px 20px;
+          border: none;
+          border-radius: 8px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          &.btn-secondary {
+            background: transparent;
+            color: $text-muted;
+            border: 1px solid $border-color;
+
+            &:hover {
+              color: $text-light;
+              border-color: $accent-color;
+            }
+          }
+
+          &.btn-primary {
+            background: $accent-color;
+            color: white;
+
+            &:hover:not(:disabled) {
+              background: darken($accent-color, 10%);
+            }
+
+            &:disabled {
+              opacity: 0.5;
+              cursor: not-allowed;
+            }
+          }
+
+          .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .document-center-container {
+    padding: 12px;
+
+    .document-header {
+      flex-direction: column;
+      gap: 16px;
+      align-items: stretch;
+
+      .header-stats {
+        justify-content: center;
+      }
+    }
+
+    .action-bar {
+      flex-direction: column;
+      gap: 16px;
+      align-items: stretch;
+
+      .view-toggles {
+        justify-content: center;
+      }
+    }
+
+    .main-content {
+      .expedientes-view .expedientes-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pending-view {
+        .pending-item {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 16px;
+
+          .pending-actions {
+            justify-content: flex-end;
+          }
+        }
+      }
+    }
+
+    .modal-overlay .modal-content {
+      margin: 20px;
+      width: calc(100% - 40px);
+    }
+  }
+}

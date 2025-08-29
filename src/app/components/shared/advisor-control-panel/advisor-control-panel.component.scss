@@ -1,0 +1,335 @@
+.advisor-control-panel {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  border: 1px solid #475569;
+  border-radius: 16px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(12px);
+  padding: 16px;
+  min-width: 280px;
+  max-width: 350px;
+  z-index: 1000;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:hover {
+    box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.5), 0 15px 15px -5px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+  }
+
+  // Estados de sesión
+  &.state-exploration {
+    border-left: 4px solid #06b6d4;
+  }
+  
+  &.state-ready_to_formalize {
+    border-left: 4px solid #f59e0b;
+  }
+  
+  &.state-formalizing {
+    border-left: 4px solid #8b5cf6;
+  }
+  
+  &.state-completed {
+    border-left: 4px solid #10b981;
+  }
+
+  // Adaptación por dispositivo
+  &.device-mobile {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+    border-radius: 16px 16px 0 0;
+    min-width: auto;
+    max-width: none;
+    padding: 20px;
+    
+    .control-tools {
+      justify-content: space-around;
+      gap: 8px;
+      
+      .tool-btn {
+        flex: 1;
+        min-width: 60px;
+      }
+    }
+  }
+  
+  &.device-tablet {
+    top: 80px;
+    right: 16px;
+    min-width: 320px;
+  }
+}
+
+.session-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  
+  .status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  &.status-normal {
+    background-color: rgba(6, 182, 212, 0.1);
+    color: #67e8f9;
+    
+    .status-indicator {
+      background-color: #06b6d4;
+    }
+  }
+  
+  &.status-high {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: #fbbf24;
+    
+    .status-indicator {
+      background-color: #f59e0b;
+      animation-duration: 1s;
+    }
+  }
+  
+  &.status-success {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: #6ee7b7;
+    
+    .status-indicator {
+      background-color: #10b981;
+      animation: none;
+    }
+  }
+}
+
+.control-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+  
+  .tool-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 8px;
+    border: 1px solid #475569;
+    border-radius: 12px;
+    background: rgba(30, 41, 59, 0.8);
+    color: #e2e8f0;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 70px;
+    position: relative;
+    
+    .tool-icon {
+      font-size: 18px;
+      line-height: 1;
+    }
+    
+    .tool-label {
+      font-size: 11px;
+      text-align: center;
+      line-height: 1.2;
+    }
+    
+    .badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: #ef4444;
+      color: white;
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: bold;
+      animation: bounce 1s infinite;
+    }
+    
+    &:hover:not(:disabled) {
+      background: rgba(51, 65, 85, 0.9);
+      border-color: #64748b;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    &:active:not(:disabled) {
+      transform: translateY(0);
+    }
+    
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background: rgba(15, 23, 42, 0.5);
+    }
+    
+    // Estados específicos de herramientas
+    &.simulator {
+      &:hover:not(:disabled) {
+        border-color: #06b6d4;
+        box-shadow: 0 4px 12px rgba(6, 182, 212, 0.2);
+      }
+    }
+    
+    &.documents {
+      &.contextual {
+        border-color: #f59e0b;
+        background: rgba(245, 158, 11, 0.1);
+        
+        &:hover {
+          background: rgba(245, 158, 11, 0.2);
+          box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+      }
+    }
+    
+    &.save {
+      &.urgent {
+        border-color: #8b5cf6;
+        background: rgba(139, 92, 246, 0.1);
+        animation: glow 2s ease-in-out infinite alternate;
+        
+        &:hover {
+          background: rgba(139, 92, 246, 0.2);
+          box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+        }
+      }
+    }
+    
+    &.cancel {
+      &:hover:not(:disabled) {
+        border-color: #ef4444;
+        color: #fca5a5;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+      }
+    }
+  }
+}
+
+.simulation-context {
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 12px;
+  padding: 12px;
+  margin-top: 8px;
+  
+  .context-info {
+    color: #e2e8f0;
+    
+    strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: #67e8f9;
+    }
+    
+    .payment-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #94a3b8;
+      
+      span {
+        &:first-child {
+          color: #10b981;
+          font-weight: 600;
+        }
+        
+        &:last-child {
+          color: #f59e0b;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+}
+
+// Animaciones
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 5px rgba(139, 92, 246, 0.2), 0 0 10px rgba(139, 92, 246, 0.1);
+  }
+  to {
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.4), 0 0 20px rgba(139, 92, 246, 0.2);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .advisor-control-panel:not(.device-mobile) {
+    right: 12px;
+    top: 12px;
+    min-width: 240px;
+    padding: 12px;
+    
+    .control-tools {
+      gap: 8px;
+      
+      .tool-btn {
+        min-width: 50px;
+        padding: 8px 6px;
+        
+        .tool-icon {
+          font-size: 16px;
+        }
+        
+        .tool-label {
+          font-size: 10px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .advisor-control-panel.device-mobile {
+    .session-status {
+      font-size: 13px;
+    }
+    
+    .control-tools .tool-btn {
+      .tool-icon {
+        font-size: 20px;
+      }
+      
+      .tool-label {
+        font-size: 10px;
+      }
+    }
+  }
+}

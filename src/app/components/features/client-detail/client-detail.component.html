@@ -1,0 +1,258 @@
+<div class="client-detail-container">
+  @if (client) {
+    <!-- Client Header -->
+    <div class="client-header">
+      <img [src]="client.avatarUrl" [alt]="client.name" class="client-avatar">
+      <div class="client-info">
+        <h1>{{ client.name }}</h1>
+        <p class="client-status">{{ client.status }}</p>
+        <p class="client-flow">{{ client.flow }}</p>
+      </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="tab-navigation mb-6">
+      <div class="flex space-x-2">
+        <button 
+          type="button"
+          (click)="setActiveTab('overview')"
+          [class]="getTabClass('overview')">
+          General
+        </button>
+        
+        @if (needsDocumentCapture()) {
+          <button 
+            type="button"
+            (click)="setActiveTab('documents')"
+            [class]="getTabClass('documents')">
+            Documentos
+          </button>
+        }
+        
+        @if (needsPayment()) {
+          <button 
+            type="button"
+            (click)="setActiveTab('payment')"
+            [class]="getTabClass('payment')">
+            Pago
+          </button>
+        }
+        
+        @if (needsDigitalSignature()) {
+          <button 
+            type="button"
+            (click)="setActiveTab('signature')"
+            [class]="getTabClass('signature')">
+            Firma Digital
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Tab Content Sections -->
+    <div class="client-sections">
+      
+      <!-- Overview Tab -->
+      @if (currentTab() === 'overview') {
+        <!-- Documents Section -->
+        <div class="section documents-section">
+          <h3>Documentos</h3>
+          <div class="documents-list">
+            @for (doc of client.documents; track doc.id) {
+              <div class="document-item" [class]="'status-' + doc.status.toLowerCase().replace(' ', '-')">
+                <div class="document-info">
+                  <span class="document-name">{{ doc.name }}</span>
+                  <span class="document-status">{{ doc.status }}</span>
+                </div>
+                
+                @if (doc.name === 'Verificación Biométrica (Metamap)' && doc.status === 'Pendiente') {
+                  <button (click)="toggleMetamapVerification()" 
+                          class="verification-btn kyc-btn">
+                    🔍 Iniciar Verificación KYC
+                  </button>
+                }
+              </div>
+            }
+          </div>
+        </div>
+        
+        <!-- KYC/Verificación Biométrica Section (Metamap) -->
+        @if (showMetamap() && hasMetamapDocument()) {
+          <div class="section kyc-verification-section">
+            <h3>🔍 Verificación de Identidad (KYC)</h3>
+            <p class="section-description">Verificación biométrica obligatoria antes de proceder con la formalización</p>
+            <app-metamap 
+              [clientId]="client.id"
+              (onVerificationComplete)="onVerificationComplete($event)"
+              (onVerificationStart)="onVerificationStart($event)"
+              (onVerificationError)="onVerificationError($event)">
+            </app-metamap>
+          </div>
+        }
+
+        <!-- Payment Plan Section -->
+        @if (client.paymentPlan) {
+          <div class="section payment-section">
+            <h3>Plan de Pagos</h3>
+            <div class="payment-details">
+              <div class="payment-stat">
+                <label>Meta Mensual:</label>
+                <span>${{ client.paymentPlan.monthlyGoal.toLocaleString('es-MX') }}</span>
+              </div>
+              <div class="payment-stat">
+                <label>Progreso Actual:</label>
+                <span>${{ client.paymentPlan.currentMonthProgress.toLocaleString('es-MX') }}</span>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- Savings Plan Section -->
+        @if (client.savingsPlan) {
+          <div class="section savings-section">
+            <h3>Plan de Ahorro</h3>
+            <div class="savings-details">
+              <div class="savings-stat">
+                <label>Meta:</label>
+                <span>${{ client.savingsPlan.goal.toLocaleString('es-MX') }}</span>
+              </div>
+              <div class="savings-stat">
+                <label>Progreso:</label>
+                <span>${{ client.savingsPlan.progress.toLocaleString('es-MX') }}</span>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- Payment Request Section -->
+        @if (needsPayment()) {
+          <div class="section payment-section">
+            <div class="payment-header">
+              <h3>Solicitud de Pago</h3>
+              <button 
+                (click)="togglePaymentRequest()" 
+                class="payment-toggle-btn"
+                [class.active]="showPaymentRequest()">
+                @if (showPaymentRequest()) {
+                  💰 Ocultar Opciones de Pago
+                } @else {
+                  💳 Solicitar Pago de Enganche
+                }
+              </button>
+            </div>
+            
+            @if (showPaymentRequest()) {
+              <div class="payment-content">
+                <app-payment-request 
+                  [clientId]="client.id"
+                  [paymentAmount]="getPaymentAmount()"
+                  [paymentDescription]="'Pago de enganche - ' + client.name"
+                  (paymentCompleted)="onPaymentCompleted($event)"
+                  (proceedToSignature)="onProceedToSignature()">
+                </app-payment-request>
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Digital Signature Section -->
+        @if (needsDigitalSignature()) {
+          <div class="section signature-section">
+            <div class="signature-header">
+              <h3>✍️ Firma Digital de Contratos (Mifiel)</h3>
+              <p class="section-description">Firma electrónica de contratos después de completar KYC y pago</p>
+              <button 
+                (click)="toggleDigitalSignature()" 
+                class="signature-toggle-btn"
+                [class.active]="showDigitalSignature()">
+                @if (showDigitalSignature()) {
+                  📁 Ocultar Firma Digital
+                } @else {
+                  ✍️ Gestionar Firma Digital
+                }
+              </button>
+            </div>
+            
+            @if (showDigitalSignature()) {
+              <div class="signature-content">
+                <app-digital-signature 
+                  [clientId]="client.id"
+                  (documentSigned)="onDocumentSigned($event)">
+                </app-digital-signature>
+              </div>
+            }
+          </div>
+        }
+
+        <!-- KINBAN Scoring Section -->
+        @if (needsKinbanScoring()) {
+          <div class="section scoring-section">
+            <div class="scoring-header">
+              <h3>Evaluación Crediticia KINBAN/HASE</h3>
+              <button 
+                (click)="toggleKinbanScoring()" 
+                class="scoring-toggle-btn"
+                [class.active]="showKinbanScoring()">
+                @if (showKinbanScoring()) {
+                  📊 Ocultar Evaluación
+                } @else {
+                  🎯 Realizar Scoring Crediticio
+                }
+              </button>
+            </div>
+            
+            @if (showKinbanScoring()) {
+              <div class="scoring-content">
+                <app-kinban-scoring 
+                  [scoreRequest]="kinbanScoreRequest()"
+                  (scoringCompleted)="onScoringCompleted($event)">
+                </app-kinban-scoring>
+              </div>
+            }
+          </div>
+        }
+      }
+
+      <!-- Documents Tab -->
+      @if (currentTab() === 'documents') {
+        <div class="document-capture-section">
+          <app-document-capture 
+            [clientId]="client.id"
+            [clientName]="client.name"
+            [configuration]="documentConfiguration()"
+            (documentCaptured)="onDocumentCaptured($event)"
+            (documentsUpdated)="onDocumentsUpdated()">
+          </app-document-capture>
+        </div>
+      }
+
+      <!-- Payment Tab -->
+      @if (currentTab() === 'payment') {
+        <div class="payment-section">
+          <app-payment-request 
+            [clientId]="client.id"
+            [paymentAmount]="getPaymentAmount()"
+            [paymentDescription]="'Pago de enganche - ' + client.name"
+            (paymentCompleted)="onPaymentCompleted($event)"
+            (proceedToSignature)="onProceedToSignature()">
+          </app-payment-request>
+        </div>
+      }
+
+      <!-- Signature Tab -->
+      @if (currentTab() === 'signature') {
+        <div class="signature-section">
+          <app-digital-signature 
+            [clientId]="client.id"
+            (documentSigned)="onDocumentSigned($event)">
+          </app-digital-signature>
+        </div>
+      }
+
+    </div>
+  } @else {
+    <div class="no-client">
+      <p>No hay cliente seleccionado</p>
+    </div>
+  }
+</div>

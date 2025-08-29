@@ -1,0 +1,330 @@
+<div class="bg-gray-900 rounded-lg p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-bold text-gray-200">Simulador Avanzado</h2>
+    <div class="flex space-x-4">
+      <select 
+        [(ngModel)]="selectedMarket" 
+        (ngModelChange)="onMarketChange()"
+        class="bg-gray-800 text-gray-200 border border-gray-600 rounded px-3 py-2">
+        <option value="aguascalientes">Aguascalientes</option>
+        <option value="edomex">Estado de México</option>
+      </select>
+      <select 
+        [(ngModel)]="selectedClientType" 
+        (ngModelChange)="onClientTypeChange()"
+        class="bg-gray-800 text-gray-200 border border-gray-600 rounded px-3 py-2">
+        <option value="individual">Individual</option>
+        <option value="collective">Colectivo</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Mode Selector -->
+  <div class="mb-6">
+    <div class="flex space-x-4">
+      <button 
+        (click)="setMode('acquisition')"
+        [class]="mode() === 'acquisition' ? 
+          'bg-primary-cyan-600 text-white px-4 py-2 rounded' : 
+          'bg-gray-700 text-gray-300 px-4 py-2 rounded hover:bg-gray-600'"
+      >
+        Modo Adquisición
+      </button>
+      <button 
+        (click)="setMode('savings')"
+        [class]="mode() === 'savings' ? 
+          'bg-primary-cyan-600 text-white px-4 py-2 rounded' : 
+          'bg-gray-700 text-gray-300 px-4 py-2 rounded hover:bg-gray-600'"
+      >
+        Modo Ahorro
+      </button>
+    </div>
+  </div>
+
+  <!-- Product Package Selection -->
+  @if (availablePackages().length > 0) {
+    <div class="mb-6">
+      <h3 class="text-lg font-semibold mb-3 text-gray-200">Paquete de Producto</h3>
+      <select 
+        [(ngModel)]="selectedPackageId" 
+        (ngModelChange)="onPackageChange()"
+        class="w-full bg-gray-800 text-gray-200 border border-gray-600 rounded px-3 py-2">
+        <option value="">Seleccionar paquete...</option>
+        @for (pkg of availablePackages(); track pkg.id) {
+          <option [value]="pkg.id">{{ pkg.name }}</option>
+        }
+      </select>
+    </div>
+  }
+
+  <!-- Components Configuration -->
+  @if (selectedPackage()) {
+    <div class="mb-6">
+      <h3 class="text-lg font-semibold mb-3 text-gray-200">Configuración de Componentes</h3>
+      <div class="space-y-3">
+        @for (component of selectedPackage()!.components; track component.id) {
+          <div class="flex items-center justify-between bg-gray-800 p-4 rounded">
+            <div>
+              <label class="flex items-center space-x-3">
+                <input 
+                  type="checkbox" 
+                  [checked]="isComponentSelected(component.id)"
+                  [disabled]="!component.isOptional"
+                  (change)="toggleComponent(component.id, $event)"
+                  class="w-4 h-4 text-primary-cyan-600 bg-gray-700 border-gray-600 rounded focus:ring-primary-cyan-500"
+                />
+                <span class="text-gray-200">{{ component.name }}</span>
+                @if (!component.isOptional) {
+                  <span class="text-xs text-gray-400">(Obligatorio)</span>
+                }
+              </label>
+            </div>
+            <span class="text-primary-cyan-400 font-semibold">
+              ${{ component.price.toLocaleString() }} MXN
+            </span>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Financial Structure -->
+  @if (totalPrice() > 0) {
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      <!-- Left Panel: Controls -->
+      <div class="bg-gray-800 p-6 rounded">
+        <h3 class="text-lg font-semibold mb-4 text-gray-200">Estructura Financiera</h3>
+        
+        <div class="space-y-4">
+          <!-- Total Price -->
+          <div>
+            <label class="block text-sm text-gray-300 mb-2">Precio Total</label>
+            <div class="text-2xl font-bold text-primary-cyan-400">
+              ${{ totalPrice().toLocaleString() }} MXN
+            </div>
+          </div>
+
+          <!-- Down Payment -->
+          <div>
+            <label class="block text-sm text-gray-300 mb-2">Enganche</label>
+            <div class="flex items-center space-x-2">
+              <input 
+                type="range" 
+                [min]="minDownPayment()"
+                [max]="totalPrice()"
+                [step]="1000"
+                [(ngModel)]="downPayment"
+                (ngModelChange)="calculateFinancing()"
+                class="flex-1"
+              />
+              <input 
+                type="number" 
+                [min]="minDownPayment()"
+                [max]="totalPrice()"
+                [(ngModel)]="downPayment"
+                (ngModelChange)="calculateFinancing()"
+                class="w-32 bg-gray-700 text-gray-200 border border-gray-600 rounded px-3 py-2 text-sm"
+              />
+            </div>
+            <div class="text-sm text-gray-400 mt-1">
+              {{ downPaymentPercentage() }}% del total
+            </div>
+          </div>
+
+          <!-- Term Selection -->
+          @if (availableTerms().length > 0) {
+            <div>
+              <label class="block text-sm text-gray-300 mb-2">Plazo (meses)</label>
+              <select 
+                [(ngModel)]="selectedTerm"
+                (ngModelChange)="calculateFinancing()"
+                class="w-full bg-gray-700 text-gray-200 border border-gray-600 rounded px-3 py-2">
+                @for (term of availableTerms(); track term) {
+                  <option [value]="term">{{ term }} meses</option>
+                }
+              </select>
+            </div>
+          }
+
+          <!-- Collection Units (Savings Mode) -->
+          @if (mode() === 'savings' && collectionUnits().length > 0) {
+            <div>
+              <h4 class="text-md font-semibold mb-3 text-gray-200">Unidades de Colecta</h4>
+              <div class="space-y-2">
+                @for (unit of collectionUnits(); track unit.plate) {
+                  <div class="flex items-center justify-between bg-gray-700 p-3 rounded">
+                    <div>
+                      <span class="text-gray-200">{{ unit.plate }}</span>
+                      <div class="text-sm text-gray-400">
+                        {{ unit.fuelCapacity }}L × ${{ unit.pricePerLiter }}/L
+                      </div>
+                    </div>
+                    <div class="text-primary-cyan-400 font-semibold">
+                      ${{ unit.monthlyCollection.toLocaleString() }}
+                    </div>
+                  </div>
+                }
+              </div>
+              <div class="mt-2 text-sm text-gray-400">
+                Total mensual: ${{ totalMonthlyCollection().toLocaleString() }} MXN
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Right Panel: Results -->
+      <div class="bg-gray-800 p-6 rounded">
+        <h3 class="text-lg font-semibold mb-4 text-gray-200">Resumen Financiero</h3>
+        
+        @if (mode() === 'acquisition') {
+          <div class="space-y-3">
+            <div class="flex justify-between">
+              <span class="text-gray-300">Precio Total:</span>
+              <span class="text-gray-200">${{ totalPrice().toLocaleString() }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-300">Enganche:</span>
+              <span class="text-gray-200">${{ downPayment.toLocaleString() }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-300">Monto a Financiar:</span>
+              <span class="text-gray-200">${{ amountToFinance().toLocaleString() }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-300">Tasa de Interés:</span>
+              <span class="text-gray-200">{{ (interestRate() * 100).toFixed(1) }}% anual</span>
+            </div>
+            <hr class="border-gray-600">
+            <div class="flex justify-between text-lg font-semibold">
+              <span class="text-gray-200">Pago Mensual:</span>
+              <span class="text-primary-cyan-400">${{ monthlyPayment().toLocaleString() }}</span>
+            </div>
+          </div>
+        }
+
+        @if (mode() === 'savings') {
+          <div class="space-y-3">
+            <div class="flex justify-between">
+              <span class="text-gray-300">Meta de Ahorro:</span>
+              <span class="text-gray-200">${{ totalPrice().toLocaleString() }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-300">Ahorro Mensual:</span>
+              <span class="text-gray-200">${{ totalMonthlyCollection().toLocaleString() }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-300">Tiempo Estimado:</span>
+              <span class="text-gray-200">{{ savingsTimeMonths().toFixed(1) }} meses</span>
+            </div>
+            <hr class="border-gray-600">
+            <div class="flex justify-between text-lg font-semibold">
+              <span class="text-gray-200">Progreso Actual:</span>
+              <span class="text-primary-cyan-400">{{ savingsProgress().toFixed(1) }}%</span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Collective Credit Tanda Timeline -->
+  @if (selectedClientType === 'collective' && tandaTimeline().length > 0) {
+    <div class="mb-6">
+      <h3 class="text-lg font-semibold mb-4 text-gray-200">Cronograma de Tanda Colectiva</h3>
+      <div class="bg-gray-800 p-6 rounded">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          @for (milestone of tandaTimeline(); track $index) {
+            <div class="bg-gray-700 p-4 rounded">
+              <div class="flex items-center justify-between mb-2">
+                <h4 class="font-semibold text-gray-200">{{ milestone.label }}</h4>
+                @if (milestone.type === 'entrega') {
+                  <span class="bg-green-600 text-white text-xs px-2 py-1 rounded">
+                    Unidad {{ milestone.unitNumber }}
+                  </span>
+                }
+              </div>
+              <div class="text-sm text-gray-400">
+                Duración: {{ milestone.duration }} meses
+              </div>
+              @if (milestone.type === 'ahorro') {
+                <div class="text-sm text-primary-cyan-400">
+                  Meta: ${{ (totalPrice() / 10).toLocaleString() }}
+                </div>
+              }
+            </div>
+          }
+        </div>
+        <div class="mt-4 text-sm text-gray-400">
+          <p>Sistema de Tanda: Los primeros miembros en completar su ahorro reciben su unidad primero.</p>
+          <p>Algoritmo Snowball: Las contribuciones se redistribuyen para acelerar las entregas.</p>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Amortization Table -->
+  @if (amortizationTable().length > 0 && mode() === 'acquisition') {
+    <div class="mb-6">
+      <h3 class="text-lg font-semibold mb-4 text-gray-200">Tabla de Amortización</h3>
+      <div class="bg-gray-800 rounded overflow-hidden">
+        <div class="max-h-96 overflow-y-auto">
+          <table class="w-full">
+            <thead class="bg-gray-700 sticky top-0">
+              <tr>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase">Pago</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase">Capital</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase">Interés</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase">Total</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase">Saldo</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of amortizationTable(); track $index) {
+                <tr class="border-b border-gray-700">
+                  <td class="px-4 py-3 text-gray-200">{{ row.paymentNumber }}</td>
+                  <td class="px-4 py-3 text-gray-200">${{ row.principalPayment.toLocaleString() }}</td>
+                  <td class="px-4 py-3 text-gray-200">${{ row.interestPayment.toLocaleString() }}</td>
+                  <td class="px-4 py-3 text-primary-cyan-400 font-semibold">${{ row.totalPayment.toLocaleString() }}</td>
+                  <td class="px-4 py-3 text-gray-200">${{ row.balance.toLocaleString() }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Action Buttons -->
+  <div class="flex space-x-4">
+    <button 
+      (click)="generateQuote()"
+      [disabled]="!canGenerateQuote()"
+      [class]="canGenerateQuote() ? 
+        'bg-primary-cyan-600 hover:bg-primary-cyan-700 text-white px-6 py-3 rounded font-semibold' :
+        'bg-gray-700 text-gray-400 px-6 py-3 rounded font-semibold cursor-not-allowed'"
+    >
+      Generar Cotización
+    </button>
+    
+    @if (client) {
+      <button 
+        (click)="formalizeQuote()"
+        [disabled]="!generatedQuote()"
+        [class]="generatedQuote() ? 
+          'bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded font-semibold' :
+          'bg-gray-700 text-gray-400 px-6 py-3 rounded font-semibold cursor-not-allowed'"
+      >
+        Formalizar Plan
+      </button>
+    }
+    
+    <button 
+      (click)="reset()"
+      class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded font-semibold"
+    >
+      Reiniciar
+    </button>
+  </div>
+</div>

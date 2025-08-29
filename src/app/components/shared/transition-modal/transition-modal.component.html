@@ -1,0 +1,177 @@
+    <div class="modal-overlay" *ngIf="isVisible()" (click)="onOverlayClick($event)">
+      <div class="modal-container" [class]="modalClasses()">
+        
+        <!-- Header with progress indicator -->
+        <div class="modal-header">
+          <div class="progress-indicator">
+            <div class="progress-step" [class.active]="currentStep() >= 1">1</div>
+            <div class="progress-line" [class.active]="currentStep() >= 2"></div>
+            <div class="progress-step" [class.active]="currentStep() >= 2">2</div>
+            <div class="progress-line" [class.active]="currentStep() >= 3"></div>
+            <div class="progress-step" [class.active]="currentStep() >= 3">3</div>
+          </div>
+          <h3 class="modal-title">{{ modalTitle() }}</h3>
+          <p class="modal-subtitle">{{ modalSubtitle() }}</p>
+        </div>
+
+        <!-- Content based on transition type -->
+        <div class="modal-content">
+          
+          <!-- Simulator to Documents -->
+          <div *ngIf="transitionData()?.type === 'simulator-to-documents'" class="transition-simulator-docs">
+            <div class="simulation-summary">
+              <div class="summary-card">
+                <h4>✅ Simulación Completada</h4>
+                <div class="product-info">
+                  <strong>{{ transitionData()?.context?.productName || '' }}</strong>
+                  <div class="payment-details">
+                    <span class="monthly-payment">
+                      ${{ (transitionData()?.context?.monthlyPayment || 0) | number:'1.0-0' }}/mes
+                    </span>
+                    <span class="down-payment">
+                      ${{ (transitionData()?.context?.downPayment || 0) | number:'1.0-0' }} enganche
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="next-steps">
+              <h4>📋 Siguiente paso: Documentos</h4>
+              <p>Para formalizar esta simulación necesitamos los siguientes documentos:</p>
+              
+              <div class="required-documents">
+                <div class="document-item" *ngFor="let doc of requiredDocuments()">
+                  <span class="doc-icon">📄</span>
+                  <span class="doc-name">{{ doc }}</span>
+                </div>
+              </div>
+
+              <div class="estimated-time" *ngIf="transitionData()?.estimatedTime">
+                <span class="time-icon">⏱️</span>
+                <span>Tiempo estimado: {{ transitionData()?.estimatedTime }} minutos</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Documents to Formalization -->
+          <div *ngIf="transitionData()?.type === 'documents-to-formalization'" class="transition-docs-formal">
+            <div class="documents-status">
+              <h4>📋 Documentos Recibidos</h4>
+              <div class="status-indicator success">
+                <span class="status-icon">✅</span>
+                <span>Todos los documentos han sido cargados correctamente</span>
+              </div>
+            </div>
+
+            <div class="formalization-preview">
+              <h4>📝 Proceso de Formalización</h4>
+              <div class="process-steps">
+                <div class="step-item">
+                  <span class="step-number">1</span>
+                  <div class="step-content">
+                    <span class="step-title">Validación automática</span>
+                    <span class="step-desc">IA verificará calidad y completitud</span>
+                  </div>
+                </div>
+                <div class="step-item">
+                  <span class="step-number">2</span>
+                  <div class="step-content">
+                    <span class="step-title">Firma digital</span>
+                    <span class="step-desc">Cliente firmará digitalmente</span>
+                  </div>
+                </div>
+                <div class="step-item">
+                  <span class="step-number">3</span>
+                  <div class="step-content">
+                    <span class="step-title">Proceso completado</span>
+                    <span class="step-desc">Expediente listo para revisión</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Formalization to Completion -->
+          <div *ngIf="transitionData()?.type === 'formalization-to-completion'" class="transition-formal-complete">
+            <div class="completion-celebration">
+              <div class="celebration-icon">🎉</div>
+              <h4>¡Proceso Completado Exitosamente!</h4>
+              <p>El expediente del cliente ha sido procesado correctamente</p>
+            </div>
+
+            <div class="completion-summary">
+              <div class="summary-item">
+                <span class="item-label">Cliente:</span>
+                <span class="item-value">{{ transitionData()?.context?.clientName || 'Cliente ' + (transitionData()?.context?.clientId || '') }}</span>
+              </div>
+              <div class="summary-item">
+                <span class="item-label">Producto:</span>
+                <span class="item-value">{{ transitionData()?.context?.productName || '' }}</span>
+              </div>
+              <div class="summary-item">
+                <span class="item-label">Pago mensual:</span>
+                <span class="item-value">${{ (transitionData()?.context?.monthlyPayment || 0) | number:'1.0-0' }}</span>
+              </div>
+              <div class="summary-item">
+                <span class="item-label">Completado:</span>
+                <span class="item-value">{{ currentDate() }}</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Action buttons -->
+        <div class="modal-actions">
+          <div class="action-buttons" [class]="actionButtonsClass()">
+            
+            <!-- Simulator to Documents actions -->
+            <ng-container *ngIf="transitionData()?.type === 'simulator-to-documents'">
+              <button class="btn btn-secondary" (click)="handleAction('edit_simulation')">
+                <span class="btn-icon">✏️</span>
+                Editar Simulación
+              </button>
+              <button class="btn btn-primary" (click)="handleAction('send_whatsapp')">
+                <span class="btn-icon">📱</span>
+                Enviar por WhatsApp
+              </button>
+              <button class="btn btn-success" (click)="handleAction('proceed')">
+                <span class="btn-icon">📋</span>
+                Solicitar Documentos
+              </button>
+            </ng-container>
+
+            <!-- Documents to Formalization actions -->
+            <ng-container *ngIf="transitionData()?.type === 'documents-to-formalization'">
+              <button class="btn btn-secondary" (click)="handleAction('upload_documents')">
+                <span class="btn-icon">📁</span>
+                Subir Más Documentos
+              </button>
+              <button class="btn btn-success" (click)="handleAction('proceed')">
+                <span class="btn-icon">📝</span>
+                Iniciar Formalización
+              </button>
+            </ng-container>
+
+            <!-- Formalization to Completion actions -->
+            <ng-container *ngIf="transitionData()?.type === 'formalization-to-completion'">
+              <button class="btn btn-secondary" (click)="handleAction('cancel')">
+                <span class="btn-icon">📊</span>
+                Ver Resumen Completo
+              </button>
+              <button class="btn btn-success" (click)="handleAction('proceed')">
+                <span class="btn-icon">👤</span>
+                Nuevo Cliente
+              </button>
+            </ng-container>
+
+          </div>
+          
+          <button class="btn-close" (click)="handleAction('cancel')" title="Cerrar">
+            ✕
+          </button>
+        </div>
+
+      </div>
+    </div>

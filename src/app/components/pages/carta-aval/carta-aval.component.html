@@ -1,0 +1,264 @@
+    <div class="min-h-screen bg-gray-50 p-4">
+      <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="mb-6">
+          <button 
+            (click)="goBack()" 
+            class="flex items-center text-blue-600 hover:text-blue-800 mb-4"
+          >
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            Volver
+          </button>
+          <h1 class="text-2xl font-bold text-gray-900">{{ isEditing() ? 'Editar' : 'Nueva' }} Carta Aval</h1>
+          <p class="text-gray-600 mt-1">
+            {{ selectedEcosystem()?.name }} - Emisión de garantía para cliente
+          </p>
+        </div>
+
+        <!-- Ecosystem Status Check -->
+        <div *ngIf="selectedEcosystem() && !canIssueCartaAval()" class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+          <div class="flex">
+            <svg class="w-5 h-5 text-red-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+            </svg>
+            <div>
+              <h3 class="text-sm font-medium text-red-800">No se puede emitir Carta Aval</h3>
+              <p class="text-sm text-red-700 mt-1">
+                El ecosistema no cumple con los requisitos mínimos para emitir cartas aval. 
+                Es necesario tener el estatus 'Activo' y al menos 8 documentos aprobados.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Carta Aval Form -->
+        <div *ngIf="selectedEcosystem() && canIssueCartaAval()" class="bg-white rounded-lg shadow p-6">
+          <form (ngSubmit)="submitCartaAval()" #cartaAvalForm="ngForm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Client Information -->
+              <div class="md:col-span-2">
+                <h3 class="text-lg font-semibold mb-4">Información del Cliente</h3>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Cliente ID</label>
+                <input 
+                  type="text" 
+                  name="clientId"
+                  [(ngModel)]="formData().clientId"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="CLI_001"
+                >
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Nombre Completo del Cliente</label>
+                <input 
+                  type="text" 
+                  name="clientName"
+                  [(ngModel)]="formData().clientName"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Juan Pérez García"
+                >
+              </div>
+
+              <!-- Carta Aval Details -->
+              <div class="md:col-span-2">
+                <h3 class="text-lg font-semibold mb-4 mt-6">Detalles de la Carta Aval</h3>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Propósito</label>
+                <select 
+                  name="purpose"
+                  [(ngModel)]="formData().purpose"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Seleccionar propósito</option>
+                  <option value="ahorro_programado">Plan de Ahorro Programado</option>
+                  <option value="credito_colectivo">Crédito Colectivo (Tanda)</option>
+                  <option value="venta_plazo">Venta a Plazo</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Monto Avalado (MXN)</label>
+                <input 
+                  type="number" 
+                  name="amount"
+                  [(ngModel)]="formData().amount"
+                  min="0"
+                  step="0.01"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="150000.00"
+                >
+                <p class="text-xs text-gray-500 mt-1">Opcional. Deje vacío si no aplica un monto específico</p>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Fecha de Emisión</label>
+                <input 
+                  type="date" 
+                  name="issuedDate"
+                  [(ngModel)]="formData().issuedDate"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Válida Hasta</label>
+                <input 
+                  type="date" 
+                  name="validUntil"
+                  [(ngModel)]="formData().validUntil"
+                  required
+                  [min]="formData().issuedDate"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Representante que Emite</label>
+                <select 
+                  name="issuedBy"
+                  [(ngModel)]="formData().issuedBy"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Seleccionar representante</option>
+                  <option 
+                    *ngFor="let rep of selectedEcosystem()?.legalRepresentatives"
+                    [value]="rep.id"
+                  >
+                    {{ rep.name }} - {{ rep.position }}
+                  </option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Estado</label>
+                <select 
+                  name="status"
+                  [(ngModel)]="formData().status"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="vigente">Vigente</option>
+                  <option value="utilizada">Utilizada</option>
+                  <option value="vencida">Vencida</option>
+                  <option value="cancelada">Cancelada</option>
+                </select>
+              </div>
+
+              <!-- Notes -->
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Notas Adicionales</label>
+                <textarea 
+                  name="notes"
+                  [(ngModel)]="formData().notes"
+                  rows="3"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Información adicional relevante para la carta aval..."
+                ></textarea>
+              </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="flex justify-end space-x-4 mt-6">
+              <button 
+                type="button"
+                (click)="goBack()"
+                class="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                Cancelar
+              </button>
+              <button 
+                type="submit"
+                [disabled]="!cartaAvalForm.form.valid || isSubmitting()"
+                class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {{ isSubmitting() ? 'Generando...' : (isEditing() ? 'Actualizar' : 'Generar') }} Carta Aval
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Preview Section -->
+        <div *ngIf="selectedEcosystem() && canIssueCartaAval() && showPreview()" class="bg-white rounded-lg shadow p-6 mt-6">
+          <h3 class="text-lg font-semibold mb-4">Vista Previa - Carta Aval</h3>
+          
+          <div class="border border-gray-300 rounded-lg p-6 bg-gray-50">
+            <div class="text-center mb-6">
+              <h2 class="text-xl font-bold text-gray-900">{{ selectedEcosystem()?.businessName }}</h2>
+              <p class="text-sm text-gray-600">RFC: {{ selectedEcosystem()?.rfc }}</p>
+              <p class="text-sm text-gray-600">{{ selectedEcosystem()?.address?.street }}, {{ selectedEcosystem()?.address?.city }}, {{ selectedEcosystem()?.address?.state }}</p>
+            </div>
+
+            <div class="text-center mb-6">
+              <h3 class="text-lg font-semibold text-gray-900">CARTA AVAL</h3>
+              <p class="text-sm text-gray-600">No. {{ generateCartaAvalNumber() }}</p>
+            </div>
+
+            <div class="space-y-4 text-sm">
+              <p>
+                Por medio de la presente, <strong>{{ selectedEcosystem()?.businessName }}</strong>, 
+                con RFC <strong>{{ selectedEcosystem()?.rfc }}</strong>, a través de su 
+                {{ getRepresentativeTitle() }} <strong>{{ getRepresentativeName() }}</strong>, 
+                otorga la presente <strong>CARTA AVAL</strong> a favor de:
+              </p>
+
+              <div class="bg-white border border-gray-200 rounded p-4">
+                <p><strong>Cliente:</strong> {{ formData().clientName }}</p>
+                <p><strong>ID Cliente:</strong> {{ formData().clientId }}</p>
+                <p><strong>Propósito:</strong> {{ getPurposeText(formData().purpose || '') }}</p>
+                <p *ngIf="formData().amount"><strong>Monto Avalado:</strong> ${{ formatCurrency(formData().amount!) }} MXN</p>
+              </div>
+
+              <p>
+                La presente garantía tendrá vigencia del <strong>{{ formData().issuedDate | date:'dd/MM/yyyy' }}</strong> 
+                al <strong>{{ formData().validUntil | date:'dd/MM/yyyy' }}</strong>.
+              </p>
+
+              <p>
+                Esta carta aval se emite bajo los términos y condiciones establecidos en el convenio marco 
+                suscrito entre las partes y será válida únicamente para el propósito especificado.
+              </p>
+
+              <div class="mt-8 pt-4 border-t border-gray-300">
+                <p class="text-center">
+                  <strong>{{ getRepresentativeName() }}</strong><br>
+                  {{ getRepresentativeTitle() }}<br>
+                  {{ selectedEcosystem()?.businessName }}
+                </p>
+              </div>
+
+              <div class="text-xs text-gray-500 mt-4">
+                <p>Fecha de emisión: {{ formData().issuedDate | date:'dd/MM/yyyy' }}</p>
+                <p *ngIf="formData().notes">Notas: {{ formData().notes }}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 text-center">
+            <button 
+              type="button"
+              class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 mr-2"
+            >
+              Descargar PDF
+            </button>
+            <button 
+              type="button"
+              class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+            >
+              Enviar por Email
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>

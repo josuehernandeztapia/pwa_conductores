@@ -1,0 +1,91 @@
+<div class="advisor-control-panel" [class.compact]="isCompact()">
+  <!-- Status y contexto de sesión -->
+  <div class="session-header">
+    <div class="session-status" [class]="statusClass()">
+      <div class="status-indicator"></div>
+      <span class="status-text">{{ currentStateTitle() }}</span>
+    </div>
+
+    <!-- Herramientas disponibles -->
+    <div class="control-tools">
+      <!-- Simulador -->
+      <button 
+        class="tool-btn simulator"
+        [disabled]="!isToolAvailable('simulator')"
+        (click)="handleAction('openSimulator')"
+        title="Abrir Simulador">
+        <span class="tool-icon">📊</span>
+        <span class="tool-label" *ngIf="!isCompact()">Simular</span>
+      </button>
+
+      <!-- Documentos -->
+      <button 
+        class="tool-btn documents"
+        [disabled]="!isToolAvailable('documents')"
+        [class.contextual]="sessionContext()?.simulationComplete"
+        (click)="handleAction('showRequiredDocs')"
+        title="Ver Documentos Requeridos">
+        <span class="tool-icon">📋</span>
+        <span class="tool-label" *ngIf="!isCompact()">Documentos</span>
+        <span class="badge" *ngIf="sessionContext()?.simulationComplete">!</span>
+      </button>
+
+      <!-- Guardar y Continuar -->
+      <button 
+        class="tool-btn save-continue"
+        [disabled]="!isToolAvailable('save')"
+        [class.primary]="sessionState() === 'ready_to_formalize'"
+        (click)="handleAction('saveAndContinue')"
+        title="Guardar y Continuar">
+        <span class="tool-icon">💾</span>
+        <span class="tool-label" *ngIf="!isCompact()">Continuar</span>
+      </button>
+
+      <!-- Reset -->
+      <button 
+        class="tool-btn reset"
+        (click)="handleAction('resetSession')"
+        title="Reiniciar Sesión">
+        <span class="tool-icon">🔄</span>
+        <span class="tool-label" *ngIf="!isCompact()">Reset</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Panel de contexto expandido (modo desktop) -->
+  <div class="session-context" *ngIf="!isCompact() && sessionContext()">
+    <div class="context-details">
+      <!-- Información del producto -->
+      <div class="context-item product" *ngIf="sessionContext()?.productName">
+        <span class="context-label">Producto:</span>
+        <span class="context-value">{{ sessionContext()?.productName }}</span>
+      </div>
+
+      <!-- Pagos simulados -->
+      <div class="context-payments" *ngIf="sessionContext()?.monthlyPayment || sessionContext()?.downPayment">
+        <div class="payment-item" *ngIf="sessionContext()?.monthlyPayment">
+          <span>Mensual: ${{ sessionContext()?.monthlyPayment | number:'1.0-0' }}/mes</span>
+        </div>
+        <div class="payment-item" *ngIf="sessionContext()?.downPayment">
+          <span>Enganche: ${{ sessionContext()?.downPayment | number:'1.0-0' }}</span>
+        </div>
+      </div>
+
+      <!-- Estado de documentos -->
+      <div class="context-item documents-status" *ngIf="sessionContext()?.documentsReady !== undefined">
+        <span class="context-label">Documentos:</span>
+        <span class="context-value" [class.ready]="sessionContext()?.documentsReady" [class.pending]="!sessionContext()?.documentsReady">
+          {{ sessionContext()?.documentsReady ? 'Listos' : 'Pendientes' }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modo compacto: información condensada -->
+  <div class="compact-context" *ngIf="isCompact() && sessionContext()">
+    <div class="compact-info">
+      <span *ngIf="sessionContext()?.productName" class="product-name">{{ sessionContext()?.productName }}</span>
+      <span *ngIf="sessionContext()?.monthlyPayment" class="monthly-payment">${{ sessionContext()?.monthlyPayment | number:'1.0-0' }}/mes</span>
+    </div>
+  </div>
+</div>

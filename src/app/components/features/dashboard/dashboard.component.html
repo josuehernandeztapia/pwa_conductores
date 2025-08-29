@@ -1,0 +1,80 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1 class="dashboard-title">Dashboard Principal</h1>
+    <p class="dashboard-subtitle">Resumen general de la operación</p>
+  </div>
+
+  @if (isLoading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Cargando datos del dashboard...</p>
+    </div>
+  } @else {
+    <div class="dashboard-content">
+      <!-- Métricas principales -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-icon">👥</div>
+          <div class="metric-info">
+            <h3>{{ clients().length }}</h3>
+            <p>Clientes Totales</p>
+          </div>
+        </div>
+        
+        <div class="metric-card">
+          <div class="metric-icon">💼</div>
+          <div class="metric-info">
+            <h3>{{ getActiveClients() }}</h3>
+            <p>Activos</p>
+          </div>
+        </div>
+        
+        <div class="metric-card">
+          <div class="metric-icon">📊</div>
+          <div class="metric-info">
+            <h3>{{ getOpportunities() }}</h3>
+            <p>Oportunidades</p>
+          </div>
+        </div>
+        
+        <div class="metric-card">
+          <div class="metric-icon">✅</div>
+          <div class="metric-info">
+            <h3>{{ getCompletedClients() }}</h3>
+            <p>Completados</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actividad reciente -->
+      <div class="recent-activity">
+        <h2>Actividad Reciente</h2>
+        <div class="activity-list">
+          @for (client of getRecentClients(); track client.id) {
+            <div class="activity-item" (click)="onClientSelect(client)">
+              <img [src]="client.avatarUrl" [alt]="client.name" class="client-avatar">
+              <div class="activity-content">
+                <h4>{{ client.name }}</h4>
+                <p class="client-status">{{ client.status }}</p>
+                <p class="client-flow">{{ client.flow }}</p>
+              </div>
+              <div class="client-actions">
+                <button (click)="generateClientReport(client); $event.stopPropagation()" 
+                        class="pdf-btn" title="Generar Reporte PDF">
+                  📄
+                </button>
+                <button (click)="generateDocumentStatus(client); $event.stopPropagation()" 
+                        class="pdf-btn" title="Estado de Documentos PDF">
+                  📋
+                </button>
+                <div class="health-score" [class]="getHealthScoreClass(client.healthScore)">
+                  {{ client.healthScore }}%
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>
