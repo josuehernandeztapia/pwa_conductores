@@ -1,0 +1,125 @@
+{
+  "configVersion": 1,
+  "timestamp": 1756332501839,
+  "index": "/pwa_conductores/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/pwa_conductores/chunk-2VG4G46Q.js",
+        "/pwa_conductores/chunk-3E6OZYTF.js",
+        "/pwa_conductores/chunk-6TED7F3R.js",
+        "/pwa_conductores/chunk-A2W7UKZR.js",
+        "/pwa_conductores/chunk-AFTAQQPM.js",
+        "/pwa_conductores/chunk-BWCIE7QM.js",
+        "/pwa_conductores/chunk-BYXBJQAS.js",
+        "/pwa_conductores/chunk-CTNMEYGD.js",
+        "/pwa_conductores/chunk-EQDQRRRY.js",
+        "/pwa_conductores/chunk-FI2FYZMH.js",
+        "/pwa_conductores/chunk-FK6H3RFT.js",
+        "/pwa_conductores/chunk-IDEEAVYW.js",
+        "/pwa_conductores/chunk-IP5HHTI7.js",
+        "/pwa_conductores/chunk-KGDOWAPB.js",
+        "/pwa_conductores/chunk-KIPHH6M7.js",
+        "/pwa_conductores/chunk-NGGOSRB2.js",
+        "/pwa_conductores/chunk-QPCAL7IA.js",
+        "/pwa_conductores/chunk-QS6NN5YE.js",
+        "/pwa_conductores/chunk-SHVA34E4.js",
+        "/pwa_conductores/chunk-SO3QS7QP.js",
+        "/pwa_conductores/chunk-VKLMJP2F.js",
+        "/pwa_conductores/chunk-XP5SDB7Y.js",
+        "/pwa_conductores/chunk-Y2D5TXOC.js",
+        "/pwa_conductores/favicon.ico",
+        "/pwa_conductores/index.html",
+        "/pwa_conductores/main-37EBW6D5.js",
+        "/pwa_conductores/manifest.webmanifest",
+        "/pwa_conductores/polyfills-5CFQRCPP.js",
+        "/pwa_conductores/styles-5INURTSO.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/pwa_conductores/icons/icon-128x128.png",
+        "/pwa_conductores/icons/icon-144x144.png",
+        "/pwa_conductores/icons/icon-152x152.png",
+        "/pwa_conductores/icons/icon-192x192.png",
+        "/pwa_conductores/icons/icon-384x384.png",
+        "/pwa_conductores/icons/icon-512x512.png",
+        "/pwa_conductores/icons/icon-72x72.png",
+        "/pwa_conductores/icons/icon-96x96.png"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/pwa_conductores/chunk-2VG4G46Q.js": "5e015dd0126ef7caf2575929d41ec37127b44fac",
+    "/pwa_conductores/chunk-3E6OZYTF.js": "5f8614a4c5aef0595d024367eddc225a4bc171e6",
+    "/pwa_conductores/chunk-6TED7F3R.js": "403f43b7baa6dcd97ffabc8ce4ae80f298868fb8",
+    "/pwa_conductores/chunk-A2W7UKZR.js": "46dc1fafac7293aa3fa34079defec37388aed13b",
+    "/pwa_conductores/chunk-AFTAQQPM.js": "9c00a066e986b73a60a45b255bb7e1c684cbba6c",
+    "/pwa_conductores/chunk-BWCIE7QM.js": "1929db39c974e4d84dad1e810eccf572691f5e35",
+    "/pwa_conductores/chunk-BYXBJQAS.js": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+    "/pwa_conductores/chunk-CTNMEYGD.js": "7d983a5fdd7200f914b63dc73071a17dab40c0fe",
+    "/pwa_conductores/chunk-EQDQRRRY.js": "c40057a332d0341d595cc1d005fc2ab4f2573957",
+    "/pwa_conductores/chunk-FI2FYZMH.js": "d6e8db077f697c4240e7c99c10afa450ea46e769",
+    "/pwa_conductores/chunk-FK6H3RFT.js": "3c538698719f1cf34410542b8c702bc484e025ee",
+    "/pwa_conductores/chunk-IDEEAVYW.js": "5826f62808e8d4669641ea05d9e34b80ba38dc15",
+    "/pwa_conductores/chunk-IP5HHTI7.js": "774a1336f372482199a954f2fdb5f947ea914b4a",
+    "/pwa_conductores/chunk-KGDOWAPB.js": "e265ff1c00d3a855050b3c234bef8b1ac59ef4c0",
+    "/pwa_conductores/chunk-KIPHH6M7.js": "2a4ba3e0f623d18dd3936a9855b952d5276f6b17",
+    "/pwa_conductores/chunk-NGGOSRB2.js": "c473460d088754cc43a9f7c30fb7ce75ea1e0d75",
+    "/pwa_conductores/chunk-QPCAL7IA.js": "4bfb024ee968c080521fb1c72b7f9514602c54b1",
+    "/pwa_conductores/chunk-QS6NN5YE.js": "bd5e4977b60c4cf3be9c33be6101fafbd24ec36b",
+    "/pwa_conductores/chunk-SHVA34E4.js": "2ada32ae7028b72a2dbe51620ae452da1728511c",
+    "/pwa_conductores/chunk-SO3QS7QP.js": "c5278f5a2b3194f297848e1419211887e35d6f5f",
+    "/pwa_conductores/chunk-VKLMJP2F.js": "3b18915481a47a20e5b9fa72c6fb652f2e705980",
+    "/pwa_conductores/chunk-XP5SDB7Y.js": "411a5695053d758c84293691cd97c489602c3fef",
+    "/pwa_conductores/chunk-Y2D5TXOC.js": "2ae3d9a3e97824907881f07fb441718ba28d37b1",
+    "/pwa_conductores/favicon.ico": "9c39f434fe1261f68c5e3eefdf734630d99c5670",
+    "/pwa_conductores/icons/icon-128x128.png": "f912963bdc6d5a38d8f1dd0afbaab2ce8d657acb",
+    "/pwa_conductores/icons/icon-144x144.png": "b155fd5f2fd5d2ea7760721063003c4cd95fd783",
+    "/pwa_conductores/icons/icon-152x152.png": "eae6e0f0c8afb8aaae339e2a569b43e9238e5e6c",
+    "/pwa_conductores/icons/icon-192x192.png": "15c4180454633880d98674aa7394656196c91584",
+    "/pwa_conductores/icons/icon-384x384.png": "94a915751ef6c9282df9aea405ad679230631814",
+    "/pwa_conductores/icons/icon-512x512.png": "1de182f76f7329dfa8f9fcdd1fdcdd695bea6a99",
+    "/pwa_conductores/icons/icon-72x72.png": "aa88a6096bd973be7f6d7a5489bfa6bc2463f8c4",
+    "/pwa_conductores/icons/icon-96x96.png": "7fb8f59c30ce2ff12c700321a0b39e14b3dc8f95",
+    "/pwa_conductores/index.html": "aed8e199cb4c707f42aba7efe47f2c1fd45416d4",
+    "/pwa_conductores/main-37EBW6D5.js": "3a0e07c9bc2896620106b1f87d75a7d67a3c2c81",
+    "/pwa_conductores/manifest.webmanifest": "4fd55296a56b5486bfa1ea74d1e5b54e55c5ff9c",
+    "/pwa_conductores/polyfills-5CFQRCPP.js": "f2241e9a25858f895ce299d15f6f22e849e2fd72",
+    "/pwa_conductores/styles-5INURTSO.css": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ],
+  "navigationRequestStrategy": "performance"
+}
